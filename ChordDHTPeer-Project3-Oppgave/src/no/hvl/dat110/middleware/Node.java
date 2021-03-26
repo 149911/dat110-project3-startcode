@@ -43,7 +43,7 @@ public class Node extends UnicastRemoteObject implements NodeInterface {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public Node(String nodename, int port) throws RemoteException, NoSuchAlgorithmException {
+	public Node(String nodename, int port) throws RemoteException {
 		super();
 		this.port = port;
 		this.nodename = nodename;									// use a different name as "IP" for single machine simulation
