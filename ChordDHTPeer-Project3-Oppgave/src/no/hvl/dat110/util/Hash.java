@@ -28,7 +28,7 @@ public class Hash {
 			md = MessageDigest.getInstance("MD5");
 			byte[] messageDigest = md.digest(entity.getBytes());
 			String hex = toHex(messageDigest);
-			hashint = new BigInteger(hex);
+			hashint = new BigInteger(hex, 16);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
