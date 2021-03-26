@@ -16,40 +16,58 @@ public class Hash {
 	
 	private static BigInteger hashint; 
 	
-	public static BigInteger hashOf(String entity) throws NoSuchAlgorithmException {		
+	public static BigInteger hashOf(String entity) {		
 		// Task: Hash a given string using MD5 and return the result as a BigInteger.
 		// we use MD5 with 128 bits digest
 		// compute the hash of the input 'entity'
 		// convert the hash into hex format
 		// convert the hex into BigInteger
 		// return the BigInteger
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		byte[] messageDigest = md.digest(entity.getBytes());
-		String hex = toHex(messageDigest);
-		hashint = new BigInteger(hex);
-				int i = 1;
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(entity.getBytes());
+			String hex = toHex(messageDigest);
+			hashint = new BigInteger(hex);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 		return hashint;
 	}
 	
-	public static BigInteger addressSize() throws NoSuchAlgorithmException {
+	public static BigInteger addressSize() {
 		// Task: compute the address size of MD5
 		// get the digest length
 		// compute the number of bits = digest length * 8
 		// compute the address size = 2 ^ number of bits
 		// return the address size
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		long length = md.getDigestLength();
-		long bitslength = length * 8;		
-	
-		hashint = hashint.add(BigInteger.valueOf(2).pow((int) bitslength));
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			long length = md.getDigestLength();
+			long bitslength = length * 8;		
+		
+			hashint = hashint.add(BigInteger.valueOf(2).pow((int) bitslength));
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return hashint;
 	}
 	
-	public static int bitSize() throws NoSuchAlgorithmException {
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		int digestlen = md.getDigestLength();
-			
+	public static int bitSize() {
+		MessageDigest md;
+		int digestlen = 0;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			digestlen = md.getDigestLength();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return digestlen*8;
 	}
