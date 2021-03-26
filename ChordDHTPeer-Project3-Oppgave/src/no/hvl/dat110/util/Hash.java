@@ -27,7 +27,7 @@ public class Hash {
 		byte[] messageDigest = md.digest(entity.getBytes());
 		String hex = toHex(messageDigest);
 		hashint = new BigInteger(hex);
-				
+				int i = 1;
 		return hashint;
 	}
 	
