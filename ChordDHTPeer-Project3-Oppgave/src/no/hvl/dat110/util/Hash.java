@@ -43,23 +43,9 @@ public class Hash {
 		// compute the number of bits = digest length * 8
 		// compute the address size = 2 ^ number of bits
 		// return the address size
-		
-//		long length = 0;
-//		long bitslength = 0;
-		try {
-			md = MessageDigest.getInstance("MD5");
-//			length = md.getDigestLength();
-//			bitslength = length * 8;		
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		byte bits = (byte) bitSize();
-		byte[] bits1 = {bits};
-		String s = toHex(md.digest(bits1));
-	
-		hashint = new BigInteger(s, 16);
-		return hashint.add(BigInteger.valueOf((long) Math.pow(2, bitSize())));
+		BigInteger two = new BigInteger("2");
+		BigInteger addressSize = two.pow(bitSize());
+		return addressSize;
 	}
 	
 	public static int bitSize() {
