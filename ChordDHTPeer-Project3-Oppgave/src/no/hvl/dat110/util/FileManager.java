@@ -100,12 +100,23 @@ public class FileManager {
     	int i = 0;
     	for (i = 0; i < replicafiles.length; i++) {
     		NodeInterface successor = chordnode.findSuccessor(replicafiles[i]);
+//    		if(successor != null) {
 			successor.addKey(replicafiles[i]);   
+//	    	System.out.println("Successor: " + successor);
+//	        System.out.println("Replicafile: " + replicafiles[i]);
+//	        successor.getFilesMetadata().forEach((k,v) -> {
+//	            System.out.println("Key: " + k);
+//	            System.out.println("Value: " + v.getNameOfFile());
+//	        });
+//	        System.out.println("Size: " + successor.getFilesMetadata().size());
+//	        System.out.println(successor.getFilesMetadata().get(replicafiles[i]));
+//	        System.out.println("---------------------------------------------");
     		if (i == index) {
-        		successor.saveFileContent(filename, chordnode.getNodeID(), bytesOfFile, true); 
+        		successor.saveFileContent(filename, replicafiles[i], bytesOfFile, true); 
     		} else {
-    			successor.saveFileContent(filename, chordnode.getNodeID(), bytesOfFile, false);
+    			successor.saveFileContent(filename, replicafiles[i], bytesOfFile, false);
     		}
+
 //    		counter++;
     	}
     	
@@ -123,17 +134,21 @@ public class FileManager {
 		this.filename = filename;
 		Set<Message> succinfo = new HashSet<Message>();
 		// Task: Given a filename, find all the peers that hold a copy of this file
-		
 		// generate the N replicas from the filename by calling createReplicaFiles()
 		createReplicaFiles();
 		// it means, iterate over the replicas of the file	
 		// for each replica, do findSuccessor(replica) that returns successor s.
 		// get the metadata (Message) of the replica from the successor, s (i.e. active peer) of the file
 		// save the metadata in the set succinfo.
+		// replicafiles = new BigInteger[numReplicas];
+		
 		for (int i = 0; i < replicafiles.length; i++) {
     		NodeInterface successor = chordnode.findSuccessor(replicafiles[i]);
-    		Message m = successor.getFilesMetadata(successor.getNodeID());
-    		succinfo.add(m);
+    		if(successor != null) {
+        		Message m = successor.getFilesMetadata().get(replicafiles[i]);
+        		System.out.println(m);
+        		succinfo.add(m);
+    		}
 		}
 		
 		this.activeNodesforFile = succinfo;
