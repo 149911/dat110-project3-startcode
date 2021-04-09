@@ -86,25 +86,30 @@ public class FileManager {
      */
     public int distributeReplicastoPeers() throws RemoteException {
     	int counter = 0;
-    	
     	// Task1: Given a filename, make replicas and distribute them to all active peers such that: pred < replica <= peer
-    	
     	// Task2: assign a replica as the primary for this file. Hint, see the slide (project 3) on Canvas
-    	
     	// create replicas of the filename
-    	
 		// iterate over the replicas
-    	
     	// for each replica, find its successor by performing findSuccessor(replica)
-    	
     	// call the addKey on the successor and add the replica
-    	
     	// call the saveFileContent() on the successor
-    	
     	// increment counter
+    	Random rnd = new Random();    	
+    	int index = rnd.nextInt(Util.numReplicas-1);
+    	createReplicaFiles();
+    	int i = 0;
+    	for (i = 0; i < replicafiles.length; i++) {
+    		NodeInterface successor = chordnode.findSuccessor(replicafiles[i]);
+    		if (i == index) {
+    			successor.addKey(replicafiles[i]);   
+        		successor.saveFileContent(filename, chordnode.getNodeID(), bytesOfFile, true); 
+    		} else {
+    			successor.saveFileContent(filename, chordnode.getNodeID(), bytesOfFile, false);
+    		}
+    		counter++;
+    	}
     	
-    		
-		return counter;
+    	return i;
     }
 	
 	/**
