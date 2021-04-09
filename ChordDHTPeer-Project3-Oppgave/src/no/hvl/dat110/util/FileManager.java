@@ -63,19 +63,11 @@ public class FileManager {
 		// hash the replica
 		
 		// store the hash in the replicafiles array.
-
-		String[] replicas = new String[numReplicas];
-
+		
 		for (int i = 0; i < numReplicas; i++) {
-			String s = filename + i;
-			replicas[i] = s;
-		}
-
-		int j = 0;
-		for (String s : replicas) {
-			replicafiles[j] = Hash.hashOf(replicas[j]);
-			j++;
-		}
+            String s = filename + i;
+            replicafiles[i] = Hash.hashOf(s);
+        }
 
 	}
 	
@@ -84,44 +76,35 @@ public class FileManager {
      * @param bytesOfFile
      * @throws RemoteException 
      */
-    public int distributeReplicastoPeers() throws RemoteException {
-//    	int counter = 0;
-    	// Task1: Given a filename, make replicas and distribute them to all active peers such that: pred < replica <= peer
-    	// Task2: assign a replica as the primary for this file. Hint, see the slide (project 3) on Canvas
-    	// create replicas of the filename
+	public int distributeReplicastoPeers() throws RemoteException {
+		// Task1: Given a filename, make replicas and distribute them to all active
+		// peers such that: pred < replica <= peer
+		// Task2: assign a replica as the primary for this file. Hint, see the slide
+		// (project 3) on Canvas
+		// create replicas of the filename
 		// iterate over the replicas
-    	// for each replica, find its successor by performing findSuccessor(replica)
-    	// call the addKey on the successor and add the replica
-    	// call the saveFileContent() on the successor
-    	// increment counter
-    	Random rnd = new Random();    	
-    	int index = rnd.nextInt(Util.numReplicas-1);
-    	createReplicaFiles();
-    	int i = 0;
-    	for (i = 0; i < replicafiles.length; i++) {
-    		NodeInterface successor = chordnode.findSuccessor(replicafiles[i]);
-//    		if(successor != null) {
-			successor.addKey(replicafiles[i]);   
-//	    	System.out.println("Successor: " + successor);
-//	        System.out.println("Replicafile: " + replicafiles[i]);
-//	        successor.getFilesMetadata().forEach((k,v) -> {
-//	            System.out.println("Key: " + k);
-//	            System.out.println("Value: " + v.getNameOfFile());
-//	        });
-//	        System.out.println("Size: " + successor.getFilesMetadata().size());
-//	        System.out.println(successor.getFilesMetadata().get(replicafiles[i]));
-//	        System.out.println("---------------------------------------------");
-    		if (i == index) {
-        		successor.saveFileContent(filename, replicafiles[i], bytesOfFile, true); 
-    		} else {
-    			successor.saveFileContent(filename, replicafiles[i], bytesOfFile, false);
-    		}
+		// for each replica, find its successor by performing findSuccessor(replica)
+		// call the addKey on the successor and add the replica
+		// call the saveFileContent() on the successor
+		// increment counter
+		Random rnd = new Random();
+		int index = rnd.nextInt(Util.numReplicas - 1);
+		createReplicaFiles();
+		int i = 0;
+		for (i = 0; i < replicafiles.length; i++) {
+			NodeInterface successor = chordnode.findSuccessor(replicafiles[i]);
+			if (successor != null) {
+				successor.addKey(replicafiles[i]);
+				if (i == index) {
+					successor.saveFileContent(filename, replicafiles[i], bytesOfFile, true);
+				} else {
+					successor.saveFileContent(filename, replicafiles[i], bytesOfFile, false);
+				}
+			}
+		}
 
-//    		counter++;
-    	}
-    	
-    	return i;
-    }
+		return i;
+	}
 	
 	/**
 	 * 
